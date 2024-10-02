@@ -32,7 +32,7 @@ def cargar_datos_csv(nombre_archivo, columna_objetivo):
 
 
 def graficar_datos(fechas, datos_columna, titulo):
-    plt.plot(fechas, datos_columna, color='b', label=titulo, linewidth=2)  # Aumenta el grosor de la línea
+    plt.plot(fechas, datos_columna, color='b', label=titulo, linewidth=2)  
     plt.title(titulo)
     plt.xlabel('Fecha')
     plt.ylabel('Casos')
@@ -84,7 +84,7 @@ def main():
     if columna_objetivo:
         fechas, datos_columna = cargar_datos_csv(nombre_archivo, columna_objetivo)
 
-        # Cálculos estadísticos
+        
         media = calcular_media(datos_columna)
         varianza = calcular_varianza(datos_columna, media)
         desviacion_estandar = calcular_desviacion_estandar(varianza)
@@ -92,7 +92,7 @@ def main():
         minimo = min(datos_columna)
         total_casos = sum(datos_columna)
 
-        # Mostrar estadísticas
+        
         print(f"\nEstadísticas para {columna_objetivo}:")
         print(f"Total de casos: {total_casos}")
         print(f"Media: {media}")
