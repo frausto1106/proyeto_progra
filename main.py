@@ -3,7 +3,7 @@ import csv
 
 
 
-def cargar_datos_csv(col):
+def cargarDatos(col):
     fechas = []
     datos = []
 
@@ -19,7 +19,7 @@ def cargar_datos_csv(col):
 
     return fechas, datos
 
-def graficar_datos(fechas, datos_columna, titulo):
+def grafica(fechas, datos_columna, titulo):
     plt.plot(fechas, datos_columna, color='b', label=titulo, linewidth=2)
     plt.title(titulo)
     plt.xlabel('Fecha')
@@ -32,11 +32,9 @@ def graficar_datos(fechas, datos_columna, titulo):
 
 
 
-
-
-def mostrar_datos_nacionales():
+def nacionales():
     col = 'Nacional'
-    fechas, datos = cargar_datos_csv('covid.csv', col)
+    fechas, datos = cargarDatos("Nacional")
 
     media = sum(datos) / len(datos)
     difs = []
@@ -49,36 +47,36 @@ def mostrar_datos_nacionales():
     desviacionEstandar = varianza ** 0.5
     maximo = max(datos)
     minimo = min(datos)
-    total_casos = sum(datos)
+    tot = sum(datos)
 
     print(f"\nEstadísticas para {col}:")
-    print(f"Total de casos: {total_casos}")
+    print(f"Total de casos: {tot}")
     print(f"Media: {media}")
     print(f"Varianza: {varianza}")
     print(f"Desviación Estándar: {desviacionEstandar}")
     print(f"Máximo: {maximo}")
     print(f"Mínimo: {minimo}")
 
-    graficar_datos(fechas, datos, f"Casos Totales - {col}")
+    grafica(fechas, datos, f"Casos Totales - {col}")
 
 
 
 
-def mostrar_datos_por_estado():
+def estado():
     with open("covid.csv", newline='') as archivo_csv:
         lector = csv.reader(archivo_csv)
         encabezados = next(lector)
 
-    print("\nSelecciona el estado que deseas graficar:")
+    print("\nSelecciona el estado que deseas: ")
     for i, estado in enumerate(encabezados[1:-1], 1):
         print(f"{i}. {estado}")
 
     opc = int(input("Introduce el número del estado: "))
 
 
-    col = encabezados[opc]
+    state = encabezados[opc]
 
-    fechas, datos = cargar_datos_csv(col)
+    fechas, datos = cargarDatos(state)
 
     media = sum(datos) / len(datos)
     difs = []
@@ -91,38 +89,42 @@ def mostrar_datos_por_estado():
     desviacionEstandar = varianza ** 0.5
     maximo = max(datos)
     minimo = min(datos)
-    total_casos = sum(datos)
+    tot = sum(datos)
 
-    print(f"\nEstadísticas para {col}:")
-    print(f"Total de casos: {total_casos}")
+    print(f"\nEstadísticas para {state}")
+    print(f"Total de casos: {tot}")
     print(f"Media: {media}")
     print(f"Varianza: {varianza}")
     print(f"Desviación Estándar: {desviacionEstandar}")
     print(f"Máximo: {maximo}")
     print(f"Mínimo: {minimo}")
 
-    graficar_datos(fechas, datos, f"Casos Totales - {col}")
+    fileName = f"{state}.txt"
 
-def menu_principal():
-    while True:
-        print("\nMenú Principal:")
-        print("1. Ver datos a nivel Nacional")
-        print("2. Ver datos por Estado")
-        print("3. Terminar")
+    with open(fileName, 'w') as archivo:
+        archivo.write(f' {state}  \n')
+        archivo.write(f' Total de casos: {tot}  \n')
+        archivo.write(f' Media: {media}  \n')
+        archivo.write(f' Varianza: {varianza}  \n')
+        archivo.write(f' Desviación Estándar: {desviacionEstandar}  \n')
+        archivo.write(f' Máximo: {maximo}  \n')
+        archivo.write(f' Mínimo: {minimo}  \n')
 
-        opcion = int(input("Elige una opción: "))
+    grafica(fechas, datos, f"Casos Totales - {state}")
 
-        if opcion == 1:
-            mostrar_datos_nacionales()
-        elif opcion == 2:
-            mostrar_datos_por_estado()
-        elif opcion == 3:
-            break
-        else:
-            print("Opción no válida.")
+while True:
+    print("\nMenú Principal:")
+    print("1. Ver datos a nivel Nacional")
+    print("2. Ver datos por Estado")
+    print("3. Terminar")
 
-def main():
-    menu_principal()
+    opcion = int(input("Elige una opción: "))
 
-if __name__ == "__main__":
-    main()
+    if opcion == 1:
+        nacionales()
+    elif opcion == 2:
+        estado()
+    elif opcion == 3:
+        break
+    else:
+        print("Opción no válida.")
