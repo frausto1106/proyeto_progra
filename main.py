@@ -33,16 +33,36 @@ def grafica(fechas, datos_columna, titulo):
 
 
 def nacionales():
+    with open("covid.csv", newline='') as archivo_csv:
+        lector = csv.reader(archivo_csv)
+        encabezados = next(lector)
+
+    print("\nEstadísticas por Estado:")
+
+    for estado in encabezados[1:-1]:
+        fechas, datos = cargarDatos(estado)
+
+        media = sum(datos) / len(datos)
+        difs = [(x - media) ** 2 for x in datos]
+        varianza = sum(difs) / len(datos)
+        desviacionEstandar = varianza ** 0.5
+        maximo = max(datos)
+        minimo = min(datos)
+        tot = sum(datos)
+
+        print(f"\nEstadísticas para {estado}:")
+        print(f"Total de casos: {tot}")
+        print(f"Media: {media}")
+        print(f"Varianza: {varianza}")
+        print(f"Desviación Estándar: {desviacionEstandar}")
+        print(f"Máximo: {maximo}")
+        print(f"Mínimo: {minimo}")
+
     col = 'Nacional'
-    fechas, datos = cargarDatos("Nacional")
+    fechas, datos = cargarDatos(col)
 
     media = sum(datos) / len(datos)
-    difs = []
-
-    for x in datos:
-        dif = x - media
-        difs.append(dif ** 2)
-
+    difs = [(x - media) ** 2 for x in datos]
     varianza = sum(difs) / len(datos)
     desviacionEstandar = varianza ** 0.5
     maximo = max(datos)
@@ -56,9 +76,6 @@ def nacionales():
     print(f"Desviación Estándar: {desviacionEstandar}")
     print(f"Máximo: {maximo}")
     print(f"Mínimo: {minimo}")
-
-    grafica(fechas, datos, f"Casos Totales - {col}")
-
 
 
 
